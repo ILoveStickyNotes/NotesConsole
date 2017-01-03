@@ -1,0 +1,6 @@
+C:\Users\BuiM1\Desktop\goworkspace\src\github.com\ILoveStickyNotes\NotesConsole\NotesConsole\bin\Debug\NotesConsole.exe.config
+C:\Users\BuiM1\Desktop\goworkspace\src\github.com\ILoveStickyNotes\NotesConsole\NotesConsole\bin\Debug\NotesConsole.exe
+C:\Users\BuiM1\Desktop\goworkspace\src\github.com\ILoveStickyNotes\NotesConsole\NotesConsole\bin\Debug\NotesConsole.pdb
+C:\Users\BuiM1\Desktop\goworkspace\src\github.com\ILoveStickyNotes\NotesConsole\NotesConsole\obj\Debug\NotesConsole.csprojResolveAssemblyReference.cache
+C:\Users\BuiM1\Desktop\goworkspace\src\github.com\ILoveStickyNotes\NotesConsole\NotesConsole\obj\Debug\NotesConsole.exe
+C:\Users\BuiM1\Desktop\goworkspace\src\github.com\ILoveStickyNotes\NotesConsole\NotesConsole\obj\Debug\NotesConsole.pdb
