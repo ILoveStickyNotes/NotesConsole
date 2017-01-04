@@ -1,71 +1,105 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel.Design;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NotesConsole
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            const string path = @"%userprofile%\desktop";
-
+            var path = Environment.ExpandEnvironmentVariables(@"%userprofile%\desktop\");
+            const string fileName = "Call_Notes.txt";
+            
+            var notes = new Notes();
             while (true)
             {
-                Options.Menu();
+                Ui.Clear();
+                Ui.MainMenu();
+                
                 var selection = Console.ReadLine();
 
                 switch (selection)
                 {
                     case "1":
-                        Console.Write("Caller's Username: ");
-                        var input = Console.ReadLine();
-                        Console.Write("Notes: ");
-                        var notes = Console.ReadLine();
+
+                        while (true)
+                        {
+                            Ui.Clear();
+                            Console.Write("Caller's Username: ");
+                            var username = Console.ReadLine();
+                            Console.Write("Notes: ");
+                            var otherInfo = Console.ReadLine();
+                            notes.AddNote(username,otherInfo);
+                            if(Ui.Continue("Continue [Y] | Main Menu [N]", "Y"))
+                                break;
+                            
+                        }
                         break;
+
                     case "2":
 
-                        break;
-                    case "3":
+                        var fileLog = new FileLogger();
+                        var file = new FileWriter(path, fileName ,notes.NoteList);
+                        Ui.Clear();
+                        
+                        fileLog.LogInfo("Writing Notes to file...");
+                        Thread.Sleep(3000);
+                        file.Write();
+                        fileLog.LogInfo("Complete!");
+                        Thread.Sleep(3000);
 
                         break;
+
+                    case "3":
+                        Ui.Clear();
+                        notes.ViewNotes();
+                        Ui.Continue();
+                        break;
+
+                    case "4":
+                        Ui.Clear();
+                        Ui.AdditionalOptions();
+                        var aOption = Console.ReadLine();
+                        var stats = new Statistics(path, fileName);
+                        Ui.Clear();
+                        switch (aOption)
+                        {
+                            case "1":
+                                Console.WriteLine(stats.TroublesomeUser());
+                                Ui.Continue("Press any key to go back...");
+                                break;
+                            case "2":
+
+                                break;
+                            case "3":
+
+                                break;
+                            case "4":
+
+                                break;
+                            case "5":
+
+                                break;
+                            default:
+
+                                break;
+                        }
+
+                        break;
+
                     default:
-                        Console.WriteLine("Try Again");
+                        Ui.IncorrectOption();
                         break;
                 }
             }
         }
-        
-    }
 
-    public class Notes
-    {
-        public Notes()
-        {
-            
-        }
-    }
-
-    public class NoteFormat
-    {
-        
-    }
-
-    public class FileWriter
-    {
-        public FileWriter(string path,string writtenInfo)
-        {
-            using (var streamWriter = new StreamWriter(path))
-            {
-                if (File.Exists(path + "Call_Notes.txt"))
-
-                streamWriter.Write(writtenInfo);
-            }
-        }
     }
 }
