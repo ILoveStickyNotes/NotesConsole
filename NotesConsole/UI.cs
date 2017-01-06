@@ -46,11 +46,13 @@ namespace NotesConsole
                 .AppendLine()
                 .Append("2 - Most Busiest Day")
                 .AppendLine()
-                .Append("3 - Most Common Word Recorded")
+                .Append("3 - Most Common Phrase or Word Recorded")
                 .AppendLine()
                 .Append("4 - Longest Information Recorded")
                 .AppendLine()
-                .Append("5 - Important Links");
+                .Append("5 - All Users Entered")
+                .AppendLine()
+                .Append("6 - Important Links");
 
             Console.WriteLine(builder);
                 
@@ -64,7 +66,7 @@ namespace NotesConsole
 
         public static void Continue()
         {
-            Console.WriteLine(new StringBuilder().Append('=',30));
+            Console.WriteLine(new StringBuilder().AppendLine().Append('=',30));
             Console.WriteLine("Press any key to go back to the main menu...");
             var key = Console.ReadKey().Key.ToString();
             
@@ -72,7 +74,7 @@ namespace NotesConsole
 
         public static void Continue(string instruction)
         {
-            Console.WriteLine(new StringBuilder().Append('=', 30));
+            Console.WriteLine(new StringBuilder().AppendLine().Append('=', 30));
             Console.WriteLine(instruction);
             var key = Console.ReadKey().Key.ToString();
 
@@ -80,8 +82,7 @@ namespace NotesConsole
 
         public static bool Continue(string instruction, string continueKey)
         {
-
-            Console.WriteLine(new StringBuilder().Append('=', 30));
+            Console.WriteLine(new StringBuilder().AppendLine().Append('=', 30));
             Console.WriteLine(instruction);
             var key = Console.ReadKey().Key.ToString();
             return (key != continueKey);
