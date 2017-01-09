@@ -22,6 +22,15 @@ namespace NotesConsole
             Console.WriteLine(builder);
 
         }
+
+        public static void CustomMenu(params string[] customOptions)
+        {
+            for (var i = 0; i < customOptions.Length; i++)
+            {
+                Console.WriteLine((i+1) + " - " + customOptions[i]);
+            }
+        }
+
         public static void MainMenu()
         {
             var builder = new StringBuilder();
@@ -32,7 +41,9 @@ namespace NotesConsole
                 .AppendLine()
                 .Append("3 - View Notes")
                 .AppendLine()
-                .Append("4 - Additional Options");
+                .Append("4 - Additional Options")
+                .AppendLine()
+                .Append("5 - COMING SOON");
 
             Console.WriteLine(builder);
         }
@@ -46,13 +57,11 @@ namespace NotesConsole
                 .AppendLine()
                 .Append("2 - Most Busiest Day")
                 .AppendLine()
-                .Append("3 - Most Common Phrase or Word Recorded")
+                .Append("3 - Most Common Word Recorded")
                 .AppendLine()
                 .Append("4 - Longest Information Recorded")
                 .AppendLine()
-                .Append("5 - All Users Entered")
-                .AppendLine()
-                .Append("6 - Important Links");
+                .Append("5 - All Users Entered");
 
             Console.WriteLine(builder);
                 
@@ -68,7 +77,7 @@ namespace NotesConsole
         {
             Console.WriteLine(new StringBuilder().AppendLine().Append('=',30));
             Console.WriteLine("Press any key to go back to the main menu...");
-            var key = Console.ReadKey().Key.ToString();
+            Console.ReadKey().Key.ToString();
             
         }
 
@@ -76,7 +85,7 @@ namespace NotesConsole
         {
             Console.WriteLine(new StringBuilder().AppendLine().Append('=', 30));
             Console.WriteLine(instruction);
-            var key = Console.ReadKey().Key.ToString();
+            Console.ReadKey().Key.ToString();
 
         }
 
@@ -94,7 +103,7 @@ namespace NotesConsole
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Incorrect Option Selected...");
             Console.ResetColor();
-            Continue();
+            
         }
     }
         
