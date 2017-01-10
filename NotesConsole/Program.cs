@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using System.Globalization;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace NotesConsole
 {
@@ -11,6 +14,7 @@ namespace NotesConsole
         {
             var path = Environment.ExpandEnvironmentVariables(@"%userprofile%\desktop\");
             const string fileName = "Call_Notes.txt";
+            
             var notes = new Notes();
 
             while (true)
@@ -18,7 +22,7 @@ namespace NotesConsole
                 var stats = new Statistics(path, fileName);
                 Ui.Clear();
                 Ui.MainMenu();
-                var selection = Console.ReadLine();
+                var selection = Console.ReadKey().KeyChar.ToString();
                 Ui.Clear();
 
                 switch (selection)
@@ -37,33 +41,44 @@ namespace NotesConsole
                             Console.Write("Notes: ");
                             var otherInfo = Console.ReadLine();
                             notes.AddNote(username,otherInfo);
-                            if(Ui.Continue("Continue [Y] | Main Menu [N]", "Y"))
-                                break;
-                            
+                            Console.WriteLine(new StringBuilder().AppendLine().Append('=', 30));
+                            Console.WriteLine("Another Note [Any Key] | Generate Message [1] | Main Menu [2]");
+                            var n = Console.ReadKey().KeyChar.ToString();
+
+                            if (n == "1")
+                            {
+                                Console.WriteLine(Notes.FormatNote(otherInfo));
+                                Ui.Continue();
+                            }
+                            else if (n == "2" ){break;}
+                                
+
+
                         }
+                        Ui.Clear();
+                        var fileLog = new FileLogger();
+                        var file = new FileWriter(path, fileName, notes.NoteList);
+
+                        fileLog.LogInfo("Autosaving Notes to file...");
+                        file.Write();
+                        fileLog.LogInfo("Complete!");
+                        notes.RemoveNotes();
+                        Ui.Continue();
                         break;
 
                     case "2":
 
-                        var fileLog = new FileLogger();
-                        var file = new FileWriter(path, fileName ,notes.NoteList);
-                        
-                        fileLog.LogInfo("Writing Notes to file...");
-                        Thread.Sleep(3000);
-                        file.Write();
-                        fileLog.LogInfo("Complete!");
-                        Thread.Sleep(3000);
 
                         break;
 
                     case "3":
                         Ui.CustomMenu("Today's Notes","Yesterday's Notes","All Notes", "Specified Date of Notes");
-                        var nOption = Console.ReadLine();
+                        var nOption = Console.ReadKey().KeyChar.ToString();
                         Ui.Clear();
                         switch (nOption)
                         {
                             case "1":
-                                notes.ViewNotes();
+                                
                                 break;
 
                             case "2":
@@ -107,7 +122,7 @@ namespace NotesConsole
                     case "4":
 
                         Ui.AdditionalOptions();
-                        var aOption = Console.ReadLine();
+                        var aOption = Console.ReadKey().KeyChar.ToString();
                         Ui.Clear();
 
                         switch (aOption)
@@ -142,7 +157,7 @@ namespace NotesConsole
                         Ui.Continue();
                         break;
                     case "5":
-                        Ui.CustomMenu("Quick Assistance","Save Notes to Excel","Important Links","Personal Notes","Pay Raise","Service Desk Chatroom","Announcements");
+                        Ui.CustomMenu("Quick Assistance","Export Notes to Excel","Important Links","Personal Notes","Pay Raise","Service Desk Chatroom","Announcements");
                         Ui.Continue();
                         break;
                     default:

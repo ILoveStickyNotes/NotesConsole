@@ -89,13 +89,6 @@ namespace NotesConsole
 
         }
 
-        public static bool Continue(string instruction, string continueKey)
-        {
-            Console.WriteLine(new StringBuilder().AppendLine().Append('=', 30));
-            Console.WriteLine(instruction);
-            var key = Console.ReadKey().Key.ToString();
-            return (key != continueKey);
-        }
 
         public static void IncorrectOption()
         {
