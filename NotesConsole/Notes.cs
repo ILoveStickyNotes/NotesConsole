@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace NotesConsole
 {
@@ -46,15 +47,15 @@ namespace NotesConsole
             {
                 if (word.Contains("13430"))
                 {
-                    foundKeywords[(int)ItemType.Asset].Add(word);
+                    foundKeywords[(int)ItemType.Asset].Add(word.ToUpper());
                 }
-                else if (word.Contains("TL44000R90") || word.Contains("TT430000") || word.Contains("AL44000R90") || word.Contains("A0M7300MJ") || word.Contains("AY26000MP"))
+                else if (word.ToUpper().Contains("TL44000R90") || word.ToUpper().Contains("TT430000") || word.ToUpper().Contains("AL44000R90") || word.ToUpper().Contains("A0M7300MJ") || word.ToUpper().Contains("AY26000MP"))
                 {
-                    foundKeywords[(int)ItemType.Computer].Add(word);
+                    foundKeywords[(int)ItemType.Computer].Add(word.ToUpper());
                 }
-                else if (word.Contains(@"\\es") || word.Contains(@"\\ms") || word.Contains(@"\\hs") || word.Contains(@"\\s002madprint\"))
+                else if (word.ToUpper().Contains(@"\\ES") || word.ToUpper().Contains(@"\\MS") || word.ToUpper().Contains(@"\\HS") || word.ToUpper().Contains(@"\\S002MADPRINT\"))
                 {
-                    foundKeywords[(int)ItemType.Printer].Add(word);
+                    foundKeywords[(int)ItemType.Printer].Add(word.ToUpper());
                 }
             }
 
@@ -71,60 +72,64 @@ namespace NotesConsole
                     }
                 }
             }
-            //Problem here
-            if (string.IsNullOrWhiteSpace(foundKeywords[0][0]))
+
+            if (foundKeywords[0].Count > 0 && foundKeywords[1].Count > 0 && foundKeywords[2].Count > 0)
             {
                 formattedNote =
                  $"{string.Join(" ", words)} " +
-                 $"{ItemType.Asset} ID(s): {string.Join(" ", foundKeywords[0])} " +
-                 $"{ItemType.Computer} Name(s): {string.Join(" ", foundKeywords[1])} " +
-                 $"{ItemType.Printer} Name(s): {string.Join(" ", foundKeywords[2])} ";
+                 $"{ItemType.Asset} ID(s): {string.Join(",", foundKeywords[0])} " +
+                 $"{ItemType.Computer} Name(s): {string.Join(",", foundKeywords[1])} " +
+                 $"{ItemType.Printer} Name(s): {string.Join(",", foundKeywords[2])} ";
             }
-            else if (string.IsNullOrWhiteSpace(foundKeywords[1][0]))
-            {
-                formattedNote =
-                $"{string.Join(" ", words)} " +
-                $"{ItemType.Asset} ID(s): {string.Join(" ", foundKeywords[0])} " +
-                $"{ItemType.Printer} Name(s): {string.Join(" ", foundKeywords[2])} ";
-            }
-            else if (string.IsNullOrWhiteSpace(foundKeywords[2][0]))
+            else if (foundKeywords[0].Count > 0 && foundKeywords[1].Count > 0 && foundKeywords[2].Count <= 0)
             {
                 formattedNote =
                     $"{string.Join(" ", words)} " +
-                    $"{ItemType.Asset} ID(s): {string.Join(" ", foundKeywords[0])} " +
-                    $"{ItemType.Computer} Name(s): {string.Join(" ", foundKeywords[1])} ";
+                    $"{ItemType.Asset} ID(s): {string.Join(",", foundKeywords[0])} " +
+                    $"{ItemType.Computer} Name(s): {string.Join(",", foundKeywords[1])} ";
             }
-            else if (string.IsNullOrWhiteSpace(foundKeywords[0][0]) && string.IsNullOrWhiteSpace(foundKeywords[1][0]))
+            else if (foundKeywords[0].Count > 0 && foundKeywords[1].Count <= 0 && foundKeywords[2].Count > 0)
+            {
+                formattedNote =
+                    $"{string.Join(" ", words)} " +
+                    $"{ItemType.Asset} ID(s): {string.Join(",", foundKeywords[0])} " +
+                    $"{ItemType.Printer} Name(s): {string.Join(",", foundKeywords[2])} ";
+            }
+            else if (foundKeywords[0].Count <= 0 && foundKeywords[1].Count > 0 && foundKeywords[2].Count > 0)
             {
                 formattedNote =
                  $"{string.Join(" ", words)} " +
-                 $"{ItemType.Printer} Name(s): {string.Join(" ", foundKeywords[2])} ";
+                 $"{ItemType.Computer} Name(s): {string.Join(",", foundKeywords[1])} " +
+                 $"{ItemType.Printer} Name(s): {string.Join(",", foundKeywords[2])} ";
             }
-            else if (string.IsNullOrWhiteSpace(foundKeywords[0][0]) && string.IsNullOrWhiteSpace(foundKeywords[2][0]))
+            else if (foundKeywords[0].Count <= 0 && foundKeywords[1].Count > 0 && foundKeywords[2].Count <= 0)
             {
                 formattedNote =
                     $"{string.Join(" ", words)} " +
-                    $"{ItemType.Computer} Name(s): {string.Join(" ", foundKeywords[1])} ";
+                    $"{ItemType.Computer} Name(s): {string.Join(",", foundKeywords[1])} ";
+
             }
-            else if (string.IsNullOrWhiteSpace(foundKeywords[1][0]) && string.IsNullOrWhiteSpace(foundKeywords[2][0]))
+            else if (foundKeywords[0].Count <= 0 && foundKeywords[1].Count <= 0 && foundKeywords[2].Count > 0)
+            {
+                formattedNote =
+                 $"{string.Join(" ", words)} " +
+                 $"{ItemType.Printer} Name(s): {string.Join(",", foundKeywords[2])} ";
+            }
+            else if (foundKeywords[0].Count > 0 && foundKeywords[1].Count <= 0 && foundKeywords[2].Count <= 0)
             {
                 formattedNote =
                     $"{string.Join(" ", words)} " +
-                    $"{ItemType.Asset} ID(s): {string.Join(" ", foundKeywords[0])} ";
+                    $"{ItemType.Asset} ID(s): {string.Join(",", foundKeywords[0])} ";
             }
             else
             {
-                formattedNote =
-                 $"{string.Join(" ", words)} " +
-                 $"{ItemType.Asset} ID(s): {string.Join(" ", foundKeywords[0])} " +
-                 $"{ItemType.Computer} Name(s): {string.Join(" ", foundKeywords[1])} " +
-                 $"{ItemType.Printer} Name(s): {string.Join(" ", foundKeywords[2])} ";
+                formattedNote = string.Join(" ", words);
             }
-            
-            
             return formattedNote;
 
         }
+
+        
 
         private enum ItemType
         {

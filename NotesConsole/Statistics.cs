@@ -160,10 +160,12 @@ namespace NotesConsole
 
                 foreach (var word in words)
                 {
-                    if (word == "the")
+                    if (word.ToUpper() == "THE" || word.ToUpper() == "A")
                     {
                         allWords.Remove(word);
                     }
+                    
+
                 }
             }
             
