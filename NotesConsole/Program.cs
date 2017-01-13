@@ -14,7 +14,7 @@ namespace NotesConsole
             const string windowTitle = "Simple Notes - V1.0 - by Michael Bui";
             Console.Title = windowTitle;
             Console.WindowHeight = 31;
-            Console.WindowWidth = 63;
+            Console.WindowWidth = 64;
             var fileLog = new FileLogger();
             var path = Environment.ExpandEnvironmentVariables(@"%userprofile%\desktop\");
             const string fileName = "Call_Notes.txt";
@@ -36,26 +36,31 @@ namespace NotesConsole
                         while (true)
                         {
                             Ui.Clear();
-                            
+                            Ui.ColorText(Ui.TextCenter("Most Recent Notes"),ConsoleColor.Yellow);
+                            Console.WriteLine("\n");
                             notes.ViewNotes();
 
                                         
                             Ui.Dashes();
                             Console.WriteLine();
 
-                            Console.Write(" Caller's Username: ");
+                            Console.Write(Ui.ShortenText(" Caller's Username: "));
                             var username = Console.ReadLine()?.Trim().ToUpper();
+
+                            Console.WriteLine();
                             if (string.IsNullOrEmpty(username)) username = "N/A";
                             
-                            Console.Write(" Notes: ");
+                            Console.Write(Ui.ShortenText(" Notes: "));
                             var otherInfo = Console.ReadLine()?.Trim();
                             if (string.IsNullOrEmpty(otherInfo)) otherInfo = "N/A";
 
                             notes.AddNote(username, otherInfo);
                             Console.WriteLine();
+                            Clipboard.SetText(otherInfo);
                             fileLog.LogInfo(" Copied note to Clipboard!", ConsoleColor.Cyan);
+                            Console.WriteLine();
                             Ui.Dashes();
-                            Console.WriteLine(" Another Note [Any Key] | Format & Copy Note [1] | Main Menu [2]");
+                            Ui.CustomMenu("Format & Copy Note","Main Menu","Another Note");
                             var n = Console.ReadKey().KeyChar.ToString();
 
 
@@ -69,10 +74,12 @@ namespace NotesConsole
                                 Console.WriteLine();
                                 fileLog.LogInfo(" Copied formatted note to Clipboard!", ConsoleColor.Cyan);
                                 Ui.Dashes();
-                                Console.Write(" Another Note [Any Key] | Copy Username [1] | Copy Original [2] | Copy Formatted [3] | Main Menu [4]");
+                                Ui.CustomMenu("Copy Username","Copy Original","Copy Formatted","Main Menu","Another Note");
 
                                 while (true)
                                 {
+                                    Ui.Dashes();
+                                    Console.Write(" Option Selected: ");
                                     var x = Console.ReadKey().KeyChar.ToString();
 
                                     if (x == "1")
@@ -125,19 +132,23 @@ namespace NotesConsole
                         switch (nOption)
                         {
                             case "1":
-
+                                foreach (
+                                    var date in
+                                    stats.NotesFromDate(DateTime.Today.Date.ToString(CultureInfo.InvariantCulture)))
+                                    Console.WriteLine(" " + Ui.ShortenText(date));
+                                
                                 break;
 
                             case "2":
                                 var subtract = new TimeSpan(1, 0, 0, 0);
                                 var yesterday = DateTime.Today.Date - subtract;
                                 foreach (var s in stats.NotesFromDate(yesterday.ToString(CultureInfo.InvariantCulture)))
-                                    Console.WriteLine(s);
+                                    Console.WriteLine(" " + Ui.ShortenText(s) + "\n");
                                 break;
 
                             case "3":
                                 foreach (var note in stats.GetNotes())
-                                    Console.WriteLine(note);
+                                    Console.WriteLine(" " + Ui.ShortenText(note) +"\n");
                                 break;
 
                             case "4":
@@ -148,7 +159,7 @@ namespace NotesConsole
                                 Ui.Clear();
 
                                 foreach (var dateNote in dateNotes)
-                                    Console.WriteLine(dateNote);
+                                    Console.WriteLine(" " + Ui.ShortenText(dateNote));
 
                                 break;
 
@@ -168,34 +179,38 @@ namespace NotesConsole
                         switch (aOption)
                         {
                             case "1":
-                                Ui.TextCenter(stats.TroublesomeUser() + " required your assistance for a total of " +
-                                              stats.SearchAndCountUsernames(stats.TroublesomeUser()) + " times!");
+                                Console.WriteLine();
+                                Console.WriteLine(Ui.TextCenter(stats.TroublesomeUser() + " required your assistance for a total of " +
+                                              stats.SearchAndCountUsernames(stats.TroublesomeUser()) + " times!"));
+                                Console.WriteLine();
                                 break;
 
                             case "2":
-                                Ui.TextCenter("The day you received the most calls was: " + stats.BusiestTime());
+                                Console.WriteLine(Ui.TextCenter("The day you received the most calls was: " + stats.BusiestTime()));
                                 Console.WriteLine();
-                                Ui.TextCenter("For a total of " + stats.SearchAndCountDates(stats.BusiestTime()) +
-                                              " time(s)!");            
+                                Console.WriteLine(Ui.TextCenter("For a total of " + stats.SearchAndCountDates(stats.BusiestTime()) +
+                                              " time(s)!"));            
                                 break;
 
                             case "3":
-                                Ui.TextCenter("The most common word recorded is:\n\n" + stats.MostCommonWord());
+                                Console.WriteLine(Ui.TextCenter("The most common word recorded is:\n"));
+                                Console.WriteLine(Ui.TextCenter(stats.MostCommonWord()));
                                 Console.WriteLine();
-                                Ui.TextCenter("With a total of " + stats.CommonWordCount + " word(s)!");
+                                Console.WriteLine(Ui.TextCenter("With a total of " + stats.CommonWordCount + " word(s)!"));
                                 break;
 
                             case "4":
-                                Ui.TextCenter(" Your longest note is from: " + stats.GetUsername(stats.LongestNote()));
-                                Console.WriteLine(" Which is: " + stats.GetInfo(stats.LongestNote()));
-                                
-                                Ui.TextCenter("With a total of " + stats.GetNote(stats.LongestNote()).Length + " characters!");
+                                Console.WriteLine(Ui.TextCenter(" Your longest note is from: " + stats.GetUsername(stats.LongestNote())));
+                                Ui.Dashes();
+                                Console.WriteLine(Ui.TextCenter(Ui.ShortenText(stats.GetInfo(stats.LongestNote()))));
+                                Ui.Dashes();
+                                Console.WriteLine(Ui.TextCenter("With a total of " + stats.GetNote(stats.LongestNote()).Length + " characters!"));
                                     
                                 break;
 
                             case "5":
                                 foreach (var name in stats.GetUsernames())
-                                    Ui.TextCenter(name);
+                                    Console.WriteLine(Ui.TextCenter(name));
                                 break;
 
                             default:
