@@ -38,9 +38,17 @@ namespace NotesConsole
                             Ui.Clear();
                             Ui.ColorText(Ui.TextCenter("Most Recent Notes"),ConsoleColor.Yellow);
                             Console.WriteLine("\n");
-                            notes.ViewNotes();
 
-                                        
+                            //Display Today's Notes
+                            for (var i = (int)(stats.NotesFromDate(DateTime.Today.Date.ToString(CultureInfo.InvariantCulture)).Length / 1.25); i <
+                                            stats.NotesFromDate(
+                                                DateTime.Today.Date.ToString(CultureInfo.InvariantCulture)).Length; i++)
+                            {
+                                Console.WriteLine(" " + Ui.ShortenText(stats.NotesFromDate(DateTime.Today.Date.ToString(CultureInfo.InvariantCulture))[i]));
+                                Console.WriteLine();
+                            }
+
+
                             Ui.Dashes();
                             Console.WriteLine();
 
@@ -54,13 +62,30 @@ namespace NotesConsole
                             var otherInfo = Console.ReadLine()?.Trim();
                             if (string.IsNullOrEmpty(otherInfo)) otherInfo = "N/A";
 
+
+
                             notes.AddNote(username, otherInfo);
                             Console.WriteLine();
                             Clipboard.SetText(otherInfo);
                             fileLog.LogInfo(" Copied note to Clipboard!", ConsoleColor.Cyan);
                             Console.WriteLine();
                             Ui.Dashes();
+
+                            //Save Notes 
+                            var file = new FileWriter(path, fileName, notes.NoteList);
+                            Console.Write(" ");
+                            fileLog.LogInfo("Autosaving Note to file...");
+                            file.Write();
+                            Console.Write(" ");
+                            fileLog.LogInfo("Complete!");
+                            notes.RemoveNotes();
+
+                            Ui.Dashes();
                             Ui.CustomMenu("Format & Copy Note","Main Menu","Another Note");
+
+                            
+
+                           
                             var n = Console.ReadKey().KeyChar.ToString();
 
 
@@ -68,7 +93,14 @@ namespace NotesConsole
                             {
                                 var formattedNote = Notes.FormatNote(otherInfo);
                                 Ui.Clear();
-                                Ui.NoteMenu(username, otherInfo, formattedNote);
+
+                                Console.WriteLine();
+                                Console.WriteLine(Ui.ShortenText(" Username: " + username));
+                                Console.WriteLine();
+                                Console.WriteLine(Ui.ShortenText(" Original Note: " + otherInfo));
+                                Console.WriteLine();
+                                Console.WriteLine(Ui.ShortenText(" Formatted Note: " + formattedNote));
+
                                 if (formattedNote != null)
                                     Clipboard.SetText(formattedNote);
                                 Console.WriteLine();
@@ -113,15 +145,8 @@ namespace NotesConsole
                         }
 
                         End:
-                        Ui.Clear();
-
-                        var file = new FileWriter(path, fileName, notes.NoteList);
-
-                        fileLog.LogInfo("Autosaving Notes to file...");
-                        file.Write();
-                        fileLog.LogInfo("Complete!");
-                        notes.RemoveNotes();
-                        Ui.Continue();
+                        
+                        
                         break;
 
 
@@ -135,8 +160,11 @@ namespace NotesConsole
                                 foreach (
                                     var date in
                                     stats.NotesFromDate(DateTime.Today.Date.ToString(CultureInfo.InvariantCulture)))
+                                {
                                     Console.WriteLine(" " + Ui.ShortenText(date));
-                                
+                                    Console.WriteLine();
+                                }
+
                                 break;
 
                             case "2":
@@ -159,7 +187,7 @@ namespace NotesConsole
                                 Ui.Clear();
 
                                 foreach (var dateNote in dateNotes)
-                                    Console.WriteLine(" " + Ui.ShortenText(dateNote));
+                                    Console.WriteLine(" " + Ui.ShortenText(dateNote) + "\n");
 
                                 break;
 

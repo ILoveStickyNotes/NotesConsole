@@ -10,7 +10,7 @@ namespace NotesConsole
         
     {
 
-        private int _counter = 0;
+        private int _counter;
         public readonly List<string> NoteList = new List<string>();
 
         public string RecentNote => NoteList[_counter - 1];
@@ -26,7 +26,8 @@ namespace NotesConsole
         {
             foreach(var item in NoteList)
                 {
-                    Console.WriteLine(item);
+                    Console.WriteLine(" " + Ui.ShortenText(item));
+                    Console.WriteLine();
                 }
         }
 
@@ -38,7 +39,7 @@ namespace NotesConsole
         public static string FormatNote(string note)
         {
             
-            var formattedNote = "";
+            string formattedNote;
             var keyWords = new List<string>{"13430", "TL44000R90", "TT430000", "AL44000R90", "A0M7300MJ","AY26000MP", @"\\es", @"\\ms", @"\\hs", @"\\s002madprint\"};
             var foundKeywords = new List<List<string>> {new List<string>(), new List<string>(), new List<string>()};
             var words = new List<string>(note.Split(' '));

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 
 namespace NotesConsole
 {
@@ -25,7 +22,7 @@ namespace NotesConsole
         {
             
             var charList = new List<string>();
-            if (message.Length > Console.WindowWidth)
+            if (message.Length >= Console.WindowWidth)
             {
                 foreach (var character in message)
                 {
@@ -95,17 +92,7 @@ namespace NotesConsole
         }
 
 
-        public static void NoteMenu(string username, string original, string format)
-        {
-            Console.WriteLine();
-            Console.WriteLine(" Username: " + username);
-            Console.WriteLine();
-            Console.WriteLine(" Original Note: " + original);
-            Console.WriteLine();
-            Console.WriteLine(" Formatted Note: " + format);
-
-        }
-
+        
         public static void MainMenu()
         {
             var builder = new StringBuilder();
