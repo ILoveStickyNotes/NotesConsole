@@ -11,7 +11,7 @@ namespace NotesConsole
         {
             Dashes();
             Console.WriteLine();
-            Console.WriteLine(TextCenter("Simple Notes - V1.0"));
+            Console.WriteLine(TextCenter("SERVICE DESK UTILITY"));
             Console.WriteLine();
             Dashes();
         }
@@ -76,12 +76,13 @@ namespace NotesConsole
             return string.Format("{0," + ((Console.WindowWidth / 2) + addSpace.Length / 2) + "}", addSpace);
         }
 
-        //appends as many dashes as the width of the console.
+        //appends as many dashes as the width of the console - 1.
         public static void Dashes()
         {
             var dashes = new StringBuilder().Append('=', Console.WindowWidth - 1);
             Console.WriteLine(dashes);
         }
+
 
         public static void CustomMenu(params string[] customOptions)
         {

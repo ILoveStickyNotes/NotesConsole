@@ -40,24 +40,20 @@ namespace NotesConsole
         {
             
             string formattedNote;
-            var keyWords = new List<string>{"13430", "TL44000R90", "TT430000", "AL44000R90", "A0M7300MJ","AY26000MP", @"\\es", @"\\ms", @"\\hs", @"\\s002madprint\"};
+            var keyWords = new List<string>{"13430", "TL44000R90", "TT430000", "AL44000R90", "A0M7300MJ","AY26000MP", "SX131", @"\\es", @"\\ms", @"\\hs", @"\\s002madprint\"};
             var foundKeywords = new List<List<string>> {new List<string>(), new List<string>(), new List<string>()};
             var words = new List<string>(note.Split(' '));
 
             foreach (var word in words)
             {
                 if (word.Contains("13430"))
-                {
                     foundKeywords[(int)ItemType.Asset].Add(word.ToUpper());
-                }
-                else if (word.ToUpper().Contains("TL44000R90") || word.ToUpper().Contains("TT430000") || word.ToUpper().Contains("AL44000R90") || word.ToUpper().Contains("A0M7300MJ") || word.ToUpper().Contains("AY26000MP"))
-                {
+                
+                else if (word.ToUpper().Contains("TL44000R90") || word.ToUpper().Contains("TT430000") || word.ToUpper().Contains("AL44000R90") || word.ToUpper().Contains("A0M7300MJ") || word.ToUpper().Contains("AY26000MP") || word.ToUpper().Contains("SX131"))
                     foundKeywords[(int)ItemType.Computer].Add(word.ToUpper());
-                }
+                
                 else if (word.ToUpper().Contains(@"\\ES") || word.ToUpper().Contains(@"\\MS") || word.ToUpper().Contains(@"\\HS") || word.ToUpper().Contains(@"\\S002MADPRINT\"))
-                {
                     foundKeywords[(int)ItemType.Printer].Add(word.ToUpper());
-                }
             }
 
             for (var j = 0; j < 5; j++)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NotesConsole
@@ -9,9 +8,9 @@ namespace NotesConsole
     public class Program
     {
         [STAThread]
-        private static void Main(string[] args)
+        private static void Main()
         {
-            const string windowTitle = "Simple Notes - V1.0 - by Michael Bui";
+            const string windowTitle = "SERVICE DESK UTILITY by Michael Bui";
             Console.Title = windowTitle;
             Console.WindowHeight = 31;
             Console.WindowWidth = 64;
@@ -35,12 +34,13 @@ namespace NotesConsole
 
                         while (true)
                         {
+                            stats = new Statistics(path, fileName);
                             Ui.Clear();
                             Ui.ColorText(Ui.TextCenter("Most Recent Notes"),ConsoleColor.Yellow);
                             Console.WriteLine("\n");
 
                             //Display Today's Notes
-                            for (var i = (int)(stats.NotesFromDate(DateTime.Today.Date.ToString(CultureInfo.InvariantCulture)).Length / 1.25); i <
+                            for (var i = (int)(stats.NotesFromDate(DateTime.Today.Date.ToString(CultureInfo.InvariantCulture)).Length / 1.75 ); i <
                                             stats.NotesFromDate(
                                                 DateTime.Today.Date.ToString(CultureInfo.InvariantCulture)).Length; i++)
                             {
@@ -128,7 +128,7 @@ namespace NotesConsole
                                     }
                                     else if (x == "3")
                                     {
-                                        Clipboard.SetText(formattedNote);
+                                        if (formattedNote != null) Clipboard.SetText(formattedNote);
                                         Console.WriteLine();
                                         fileLog.LogInfo(" Copied formatted note to Clipboard!", ConsoleColor.Cyan);
                                     }
@@ -176,7 +176,9 @@ namespace NotesConsole
 
                             case "3":
                                 foreach (var note in stats.GetNotes())
-                                    Console.WriteLine(" " + Ui.ShortenText(note) +"\n");
+                                    Console.WriteLine(" " + Ui.ShortenText(note) + "\n");
+                                Ui.Dashes();
+                                Console.WriteLine(Ui.TextCenter("You've created a total of " + stats.GetNotes().Length + " notes!"));
                                 break;
 
                             case "4":
@@ -258,6 +260,15 @@ namespace NotesConsole
                         break;
                 }
             }
+           
+        }
+    }
+
+    public class InputLineBreak
+    {
+        public static async Task<string> LineBreak()
+        {
+            return await Task.Run(() => Console.ReadLine());
         }
     }
 }

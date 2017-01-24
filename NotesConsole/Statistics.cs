@@ -89,7 +89,11 @@ namespace NotesConsole
                 for (var i = 0; i < _notes.Length; i++)
                 {
                     if (username == GetUsername(i))
+                    {
+                        if (username == "N/A")
+                            break;
                         count++;
+                    }
                 }
 
                 if (count > highestInstance)
